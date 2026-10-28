@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AdventureWorks Case Study · Amr Basha</title>
+<meta name="description" content="Case study: an end-to-end customer analytics platform on AdventureWorks2025, from SQL Server warehouse to Python BTYD models and Power BI dashboards.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="index.html">Amr Basha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html#work" aria-current="page">Work</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#background">Background</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="case-hero">
+    <div class="wrap stack">
+      <p class="crumb"><a href="index.html#work">Work</a> / Case study</p>
+      <h1>AdventureWorks 2025: end-to-end customer analytics</h1>
+      <p class="lede">From raw ERP transactions to a recommended action for every customer: a layered SQL Server warehouse, a Power BI semantic model, and Python purchase models that were tested against baselines before anyone trusted them.</p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/Amr-Bayoumy-Basha/adventureworks2025_end_to_end_customer_analytics" target="_blank" rel="noopener">View the repository</a>
+        <a class="btn" href="https://app.notion.com/p/adventureworks_end_to_end_customer_analytics_project-2fb5c6a547688018a4c1ceeb6af81e0b" target="_blank" rel="noopener">Project documentation (Notion)</a>
+      </div>
+      <dl class="meta">
+        <div><dt>Role</dt><dd>Sole analyst and engineer</dd></div>
+        <div><dt>Timeline</dt><dd>May–Oct 2026, 9 phases</dd></div>
+        <div><dt>Data</dt><dd>Microsoft AdventureWorks2025 (synthetic)</dd></div>
+        <div><dt>Stack</dt><dd>SQL Server, SSIS, Power BI, DAX, Python</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <nav class="toc" aria-label="On this page">
+      <a href="#problem">Problem</a><a href="#architecture">Architecture</a><a href="#model">Semantic model</a><a href="#dashboards">Dashboards</a><a href="#python">Python models</a><a href="#lessons">Lessons</a>
+    </nav>
+  </div>
+
+  <section id="problem">
+    <div class="wrap two">
+      <div class="section-head" style="margin:0"><h2>The problem</h2></div>
+      <div class="prose">
+        <p>Most sales reporting asks which products sell. The Wharton Customer Analytics course argues the better question is which customers create value, because profit comes from customers. I set out to build a platform that treats the customer as the unit of analysis.</p>
+        <p>Before writing any SQL, I mapped each course framework to a business question and a decision it supports:</p>
+        <ul>
+          <li><b>Which customers create long-term value?</b> Decides who to retain and where to spend service effort.</li>
+          <li><b>How different are customers from each other?</b> Decides segment-specific offers.</li>
+          <li><b>Are newer cohorts better or worse?</b> Decides whether acquisition is buying the right customers.</li>
+          <li><b>What will each customer do next?</b> Decides proactive retention and forecasting.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Architecture</h2>
+        <p>A medallion warehouse in SQL Server. Each layer has one job and its own validation script, so a broken number can be traced back to the layer that produced it.</p>
+      </div>
+      <div class="layers">
+        <div style="--c: var(--muted)"><h3>Source</h3><p>AdventureWorks2025 OLTP. Phase 2 explored metadata, chose the customer-relevant tables and produced a data dictionary and ERD.</p><span class="stat">OLTP, read-only</span></div>
+        <div style="--c: #CD7F32"><h3>Bronze</h3><p>Raw copy for auditing. One SSIS package loops over the control table <span class="id">dbo.etl_bronze_table_mapping</span> and calls one generic procedure, so adding a table means adding a row, not a pipeline.</p><span class="stat">17 tables · full load</span></div>
+        <div style="--c: #B8C2D9"><h3>Silver</h3><p>EDA on Bronze first, then cleansing and standardisation in <span class="id">proc_load_silver_layer</span>, followed by row-count reconciliation against Bronze.</p><span class="stat">17 tables · validated</span></div>
+        <div style="--c: #E8C35A"><h3>Gold</h3><p>Customer-centric constellation schema: sales, sales reasons, RFM, cohort and three BTYD tables sharing <span class="id">dim_customer</span> and <span class="id">dim_date</span>. One procedure reloads the whole layer.</p><span class="stat">6 dims · 7 facts</span></div>
+        <div style="--c: var(--violet)"><h3>Model</h3><p>Power BI semantic model on Gold, and a Python notebook that reads Gold inputs and writes predictions back to Gold.</p><span class="stat">60 measures · write-back</span></div>
+        <div style="--c: var(--rose)"><h3>Reports</h3><p>Executive Summary, RFM Customer Intelligence, Customer Retention, Customer Forecasting, and a customer-level hub.</p><span class="stat">5 report pages</span></div>
+      </div>
+      <p class="muted" style="margin-top:1.25rem; font-size: var(--step--1)">Design decision: the original plan used SSAS Tabular. I replaced it with a Power BI semantic model so the model, measures and report live in one tool, which is also what the dashboards actually use.</p>
+    </div>
+  </section>
+
+  <section id="model">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Semantic model</h2>
+        <p>Every fact table keeps its own grain (order line, customer, cohort month), and no measure mixes grains in one calculation. Business logic lives in measures, not in visuals.</p>
+      </div>
+      <figure>
+        <div class="shot"><img src="img/aw-model.webp" width="1600" height="646" alt="Power BI model diagram showing the fact tables connected to shared customer and date dimensions." loading="lazy"></div>
+        <figcaption>17 tables, 14 relationships (2 inactive role-playing date relationships), 60 DAX measures in 6 display folders, 2 field parameters, and a segment playbook lookup that maps each RFM segment to an action and a success KPI.</figcaption>
+      </figure>
+      <div class="facts" style="margin-top:2rem">
+        <div><b>11</b><span>sales and profitability measures</span></div>
+        <div><b>17</b><span>reference-card measures (YoY, arrows, colours)</span></div>
+        <div><b>11</b><span>RFM measures</span></div>
+        <div><b>12</b><span>cohort measures</span></div>
+        <div><b>4 + 5</b><span>time intelligence and BTYD measures</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="dashboards">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Dashboards</h2>
+        <p>Each page is titled with the question it answers.</p>
+      </div>
+      <div class="gallery">
+        <figure>
+          <div class="shot"><img src="img/aw-executive.webp" width="1400" height="733" alt="Executive Summary page for 2024." loading="lazy"></div>
+          <figcaption><b>Executive Summary.</b> 2024 revenue of $42.96M, up 37.8%, with customers up 240% while average order value fell 61.8%: growth came from many more, smaller orders. The decomposition tree splits revenue by activity, channel, RFM segment and product line.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="img/aw-rfm.webp" width="1400" height="716" alt="RFM Customer Intelligence page with a segment treemap." loading="lazy"></div>
+          <figcaption><b>RFM Customer Intelligence.</b> 19,120 purchasing customers split into RFM segments. 2,430 are high value and 2,450 are at risk; the median customer last bought 165 days ago. Selecting a segment shows its profile, recommended action and success KPI.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="img/aw-retention.webp" width="1400" height="720" alt="Customer Retention Analytics page with a cohort retention matrix." loading="lazy"></div>
+          <figcaption><b>Customer Retention.</b> Overall retention is 16.6%, yet repeat customers bring 71.5% of revenue ($78.6M of $109.9M). The cohort matrix shows early 2022 cohorts holding up far better than later ones.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="img/aw-forecasting.webp" width="1400" height="733" alt="Customer Forecasting page with forecast cards, a status by value-tier matrix, a predicted vs actual scatter plot and a target list." loading="lazy"></div>
+          <figcaption><b>Customer Forecasting.</b> Model outputs, holdout validation and the next-best-action list. Read the 90-day revenue figure with the evaluation below: it over-predicted the holdout by 63%.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="python">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Python models, tested honestly</h2>
+        <p>I fitted BG/NBD (purchases) and Gamma-Gamma (order value) to 16,300 customers with a calibration period and a 90-day holdout, then compared them with baselines built from calibration data only.</p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Check</th><th>Result</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr><td>Total purchases, 90-day holdout</td><td class="num">2,655 predicted vs 2,475 actual (+7.3%)</td><td><span class="pill good">close</span></td></tr>
+            <tr><td>Same rate for everyone baseline</td><td class="num">+9.3% on the total</td><td><span class="pill warn">model only slightly better</span></td></tr>
+            <tr><td>Per-customer error vs each customer's own past rate</td><td class="num">MAE 0.267 vs 0.232</td><td><span class="pill bad">baseline wins</span></td></tr>
+            <tr><td>Ranking customers (Spearman)</td><td class="num">−0.135</td><td><span class="pill bad">ranked backwards</span></td></tr>
+            <tr><td>Probability a customer is still active</td><td class="num">1.0 for all customers, 4 variants</td><td><span class="pill bad">not estimable</span></td></tr>
+            <tr><td>Revenue, 90-day holdout</td><td class="num">$9.20M predicted vs $5.64M actual (+63%)</td><td><span class="pill bad">over-forecast</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two" style="margin-top: 3rem">
+        <div class="callout"><p>One-time buyers older than a year bought again at 61%. Newer ones bought again at 8%. BG/NBD cannot see tenure, so it ranked the best group lowest.</p></div>
+        <div class="prose">
+          <p><b>Why the models struggled.</b> 61.5% of customers were acquired in the last three quarters, so very few repeat buyers looked like they had left, and the optimizer concluded nobody leaves. Gamma-Gamma assumes frequency and order value are independent; here they correlate at 0.43, which inflated the revenue forecast.</p>
+          <p><b>What I shipped instead.</b> A transparent rule-based status (Active, Cooling and Lapsed Repeat, One-Time Buyer), stored next to the forecasts. The probability column is stored as NULL on purpose rather than filled with a number I couldn't defend. I tested every fix I could find (weekly units, Pareto/NBD, repeat buyers only) and documented each one.</p>
+          <p><b>Next.</b> A supervised challenger with tenure as a feature, trained on an earlier cutoff and scored on a later one, and any real campaign run against a control group.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lessons">
+    <div class="wrap two">
+      <div class="section-head" style="margin:0"><h2>What I learned</h2></div>
+      <div class="prose">
+        <ul>
+          <li><b>A model's total can look right while its rankings are wrong.</b> Checking against a naive baseline caught what the headline number hid.</li>
+          <li><b>Metadata-driven ETL pays off early.</b> Adding a table to Bronze is one row in a control table.</li>
+          <li><b>Writing predictions back to the warehouse keeps one source of truth.</b> Power BI reads forecasts the same way it reads sales.</li>
+          <li><b>Requirements first.</b> Mapping frameworks to decisions in Phase 1 decided which tables, measures and pages were worth building.</li>
+        </ul>
+        <p class="muted">AdventureWorks is synthetic, so the method and the pipeline are the point, not the business conclusions.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap next">
+      <a class="btn" href="index.html#work">Back to all work</a>
+      <a class="btn primary" href="superstore.html">Next: Global Superstore</a>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Amr Basha. Built on Microsoft's AdventureWorks sample database.</div></footer>
+</body>
+</html>

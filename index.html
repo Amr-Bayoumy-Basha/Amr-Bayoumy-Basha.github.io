@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Amr Basha</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Amr Basha builds end-to-end customer analytics with SQL Server, Python and Power BI. Pharmacist turned BI analyst, based in Jeddah.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="index.html">Amr Basha</a>
+    <nav class="nav" aria-label="Main">
+      <a href="#work">Work</a>
+      <a href="#process">Process</a>
+      <a href="#background">Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Amr Basha</h1>
+      <p class="role">Business Intelligence &amp; Customer Analytics</p>
+      <p class="lede">I build customer analytics end to end: SQL Server warehouse, Python models, Power BI reporting. Before data, I spent seven years running pharmacy counters, stock and teams in Egypt and Saudi Arabia, so I start from the business question.</p>
+      <div class="actions">
+        <a class="btn primary" href="adventureworks.html">Read the AdventureWorks case study</a>
+        <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a>
+        <a class="btn" href="https://www.linkedin.com/in/amr-basha-552912289/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/Amr-Bayoumy-Basha" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <div class="lineage" role="region" aria-label="AdventureWorks data lineage" tabindex="0">
+        <ol>
+          <li style="--c: var(--muted)"><div class="dot"></div><div class="layer">Source</div><p class="what">AdventureWorks2025 OLTP database</p><p class="stat">raw ERP tables</p></li>
+          <li style="--c: #CD7F32"><div class="dot"></div><div class="layer">Bronze</div><p class="what">Metadata-driven SSIS load from one control table</p><p class="stat">17 tables</p></li>
+          <li style="--c: #B8C2D9"><div class="dot"></div><div class="layer">Silver</div><p class="what">Cleansed, standardised, row counts validated</p><p class="stat">17 tables</p></li>
+          <li style="--c: #E8C35A"><div class="dot"></div><div class="layer">Gold</div><p class="what">Customer star schema, RFM, cohort and model tables</p><p class="stat">6 dims · 7 facts</p></li>
+          <li style="--c: var(--violet)"><div class="dot"></div><div class="layer">Model</div><p class="what">Power BI semantic model plus Python BTYD write-back</p><p class="stat">60 DAX measures</p></li>
+          <li style="--c: var(--rose)"><div class="dot"></div><div class="layer">Decisions</div><p class="what">Executive, RFM, retention and forecasting pages</p><p class="stat">16,300 customers scored</p></li>
+        </ol>
+      </div>
+      <p class="lineage-note">The pipeline behind my main project, from raw transactions to a recommended action per customer.</p>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <p>Two projects at two levels: a full analytics platform built from the database up, and a Power BI reporting project built from a flat file.</p>
+      </div>
+
+      <article class="feature">
+        <a class="shot" href="adventureworks.html" aria-label="Open the AdventureWorks case study">
+          <img src="img/aw-executive.webp" width="1400" height="733" alt="AdventureWorks executive summary dashboard: revenue, gross profit, customers and AOV cards, a revenue decomposition tree, and revenue by category and country.">
+        </a>
+        <div class="stack">
+          <h3 style="font-size: var(--step-2)">AdventureWorks 2025: end-to-end customer analytics</h3>
+          <p>A customer analytics platform built on Microsoft's AdventureWorks database. I designed a Bronze, Silver and Gold warehouse in SQL Server, loaded it with a metadata-driven SSIS package, modelled it in Power BI, and fitted BG/NBD and Gamma-Gamma models in Python whose predictions are written back to the warehouse.</p>
+          <p>The part I'm proudest of: I tested the models against simple baselines instead of trusting the totals, found where they failed, and documented why.</p>
+          <div class="facts">
+            <div><b>7,100+</b><span>lines of T-SQL across 4 layers</span></div>
+            <div><b>60</b><span>DAX measures in 6 folders</span></div>
+            <div><b>90-day</b><span>holdout used to test the forecast</span></div>
+          </div>
+          <ul class="tags" aria-label="Tools">
+            <li>SQL Server</li><li>T-SQL</li><li>SSIS</li><li>Star schema</li><li>Power BI</li><li>DAX</li><li>Python</li><li>lifetimes</li>
+          </ul>
+          <div class="actions">
+            <a class="btn primary" href="adventureworks.html">Read the case study</a>
+            <a class="btn" href="https://github.com/Amr-Bayoumy-Basha/adventureworks2025_end_to_end_customer_analytics" target="_blank" rel="noopener">Repository</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="secondary">
+        <div class="stack">
+          <h3 style="font-size: var(--step-2)">Global Superstore: profit and customer performance</h3>
+          <p>My first Power BI project: four years of retail orders turned into a star schema, a DAX layer for CLV, churn, cohorts and Pareto, and a report that ends in recommendations rather than charts.</p>
+          <div class="facts">
+            <div><b>74.6%</b><span>lifetime churn, the biggest profit leak found</span></div>
+            <div><b>45%</b><span>of profit from Technology; Furniture 19%</span></div>
+            <div><b>58%</b><span>of sales at 0–10% discount</span></div>
+          </div>
+          <ul class="tags" aria-label="Tools">
+            <li>Power Query</li><li>Star schema</li><li>DAX</li><li>Power BI</li><li>Excel</li>
+          </ul>
+          <div class="actions">
+            <a class="btn" href="superstore.html">See the project</a>
+            <a class="btn" href="https://github.com/Amr-Bayoumy-Basha/Global-Superstore-BI-Analysis" target="_blank" rel="noopener">Repository</a>
+          </div>
+        </div>
+        <figure>
+          <a class="shot" href="superstore.html" aria-label="Open the Global Superstore project">
+            <img src="img/gs-overview.webp" width="1310" height="727" alt="Global Superstore overview dashboard with KPI cards, rolling averages, sales by market and a profit margin breakdown." loading="lazy">
+          </a>
+        </figure>
+      </article>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How I work</h2>
+        <p>The same order in every project, because a dashboard is only as good as the question and the model underneath it.</p>
+      </div>
+      <ol class="process">
+        <li><h3>Business question</h3><p>Write down the decision first. In AdventureWorks: who to retain, who is slipping, what customers will do next.</p></li>
+        <li><h3>Data engineering</h3><p>Layered warehouse, repeatable loads, a validation query at every stage.</p></li>
+        <li><h3>Modelling</h3><p>Star schema and one semantic model, so every report uses the same definitions.</p></li>
+        <li><h3>Analysis and prediction</h3><p>RFM, cohorts, CLV, BTYD. Every model is checked against a simple baseline.</p></li>
+        <li><h3>Decision support</h3><p>Each segment ends in an action, a target KPI and a list of who to contact.</p></li>
+      </ol>
+
+      <div class="stack-grid" style="margin-top: 3.5rem">
+        <div>
+          <h3>Data engineering</h3>
+          <ul><li>SQL Server, T-SQL <span>warehouse, procedures</span></li><li>SSIS <span>metadata-driven ETL</span></li><li>Dimensional modelling <span>star, constellation</span></li></ul>
+        </div>
+        <div>
+          <h3>Business intelligence</h3>
+          <ul><li>Power BI <span>PL-300 certified</span></li><li>DAX <span>time intelligence, field parameters</span></li><li>Power Query, Excel</li></ul>
+        </div>
+        <div>
+          <h3>Analytics and Python</h3>
+          <ul><li>pandas, NumPy <span>analysis</span></li><li>lifetimes <span>BG/NBD, Gamma-Gamma</span></li><li>SQLAlchemy, Git</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="background">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Background</h2>
+        <p>A pharmacist who spent years reading sales, stock and expiry reports by hand, then learned to build the systems behind them.</p>
+      </div>
+      <ol class="timeline">
+        <li><time>2014–2019</time><div><h3>Bachelor of Pharmacy</h3><p>Al-Azhar University, Egypt</p></div></li>
+        <li><time>2019–2021</time><div><h3>Branch manager, Elsawaf Pharmacy</h3><p>Ran a branch in Cairo: staffing, purchasing, supplier coordination and inventory.</p></div></li>
+        <li><time>2021–2022</time><div><h3>Community and hospital pharmacist</h3><p>Seif Pharmacy, then the Egyptian Ministry of Health.</p></div></li>
+        <li><time>2022–now</time><div><h3>Community pharmacist and shift manager, BinDawood Holding</h3><p>Jeddah. Daily workflow, replenishment, expiry and shrink control, and reviewing sales and inventory reports.</p></div></li>
+        <li class="data"><time>2025</time><div><h3>Microsoft Certified: Power BI Data Analyst (PL-300)</h3><p>Plus Wharton's Customer Analytics and Operations Analytics courses. Built Global Superstore.</p></div></li>
+        <li class="data"><time>2026</time><div><h3>AdventureWorks end-to-end platform</h3><p>Nine phases from business requirements to predictive write-back.</p></div></li>
+        <li class="data"><time>Now</time><div><h3>DataCamp Associate Data Scientist track</h3><p>Next: a pharmacy-focused Python project, and a role in data and BI.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="stack">
+        <h2>Get in touch</h2>
+        <p class="muted">Open to data analyst and BI roles in Saudi Arabia and Egypt, especially in healthcare, pharmacy and retail. Email is the fastest way to reach me.</p>
+      </div>
+      <ul class="links">
+        <li><span>Email</span><span><span class="email" id="email">amrbayoumybasha@gmail.com</span><button class="copy" type="button" id="copy-email">Copy</button></span></li>
+        <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/amr-basha-552912289/" target="_blank" rel="noopener">amr-basha-552912289</a></li>
+        <li><span>GitHub</span><a href="https://github.com/Amr-Bayoumy-Basha" target="_blank" rel="noopener">Amr-Bayoumy-Basha</a></li>
+        <li><span>Résumé</span><a href="resume.pdf" target="_blank" rel="noopener">Open PDF</a></li>
+        <li><span>Location</span><span>Jeddah, Saudi Arabia</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 Amr Basha. Dashboards built on Microsoft AdventureWorks and Global Superstore sample data.</div></footer>
+
+<script>
+(function () {
+  var b = document.getElementById('copy-email');
+  if (!b) return;
+  b.addEventListener('click', function () {
+    var t = document.getElementById('email').textContent;
+    var done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1800); };
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents(document.getElementById('email')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected'; };
+    try { navigator.clipboard.writeText(t).then(done, fallback); } catch (e) { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
